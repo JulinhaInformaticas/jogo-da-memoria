@@ -1,97 +1,179 @@
-﻿namespace jogo_da_memoria
+using System.Diagnostics;
+
+namespace jogo_da_memoria
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            int[,] tela = new int[4, 4];
+
             int[,] jogo = new int[4, 4];
+            int[,] tela = new int[4, 4];
 
+            //Para criar números aleatórios
             Random gerador = new Random();
+            Stopwatch tempo = new Stopwatch();
 
-            int lin, col, acertos=0;
-
-            for (int i = 1; i <= 8; i++)
+            for (int i = 1; i <= 8; i++) //Atribui os pares de números às posições
             {
+                int lin, col;
                 for (int j = 0; j < 2; j++)
                 {
                     do
                     {
                         lin = gerador.Next(0, 4);
                         col = gerador.Next(0, 4);
-                    } while (jogo[lin, col] != 0);
 
+                    } while (jogo[lin, col] != 0);
                     jogo[lin, col] = i;
                 }
-
             }
+            tempo.Start();
+            int acertos=0, erros=0;
             do
             {
-                //impressão
+
+                Console.Write("   ");
                 for (int j = 0; j < 4; j++)
                 {
-                    for (int k = 0; k < 4; k++)
+                    Console.Write(" {0}  ", j + 1);
+                }
+                Console.WriteLine("\n-------------------");
+                for (int i = 0; i < 4; i++)
+                {
+                    Console.Write("{0} |", i + 1);
+                    for (int j = 0; j < 4; j++)
                     {
-                        Console.Write("{0} ", tela[j, k]);
+                        Console.Write(" {0} |", tela[i, j]);
                     }
-                    Console.WriteLine();
+                    Console.WriteLine("\n");
+
                 }
                 Console.WriteLine();
+
+
 
                 int lin1, col1;
-                Console.WriteLine("entre com a linha [1,4]");
-                lin1 = int.Parse(Console.ReadLine());
-                Console.WriteLine("entre com a coluna [1,4]");
-                col1 = int.Parse(Console.ReadLine());
+                do
+                {
+                    do
+                    {
+                        Console.WriteLine("Escolha uma linha para jogar [1, 4]: ");
+                        lin1 = int.Parse(Console.ReadLine());
 
-                lin1--; //dimunuir, pois o usuário não sabe
-                col1--; // que existe linha e coluna 0
-                //
+                    } while (lin1 < 1 || lin1 > 4);
+
+                    do
+                    {
+                        Console.WriteLine("Escolha uma coluna para jogar [1, 4]: ");
+                        col1 = int.Parse(Console.ReadLine());
+
+                    } while (col1 < 1 || col1 > 4);
+
+
+                    lin1--;
+                    col1--;
+
+                    if (tela[lin1, col1] != 0)
+                        Console.WriteLine("você já escolheu essa posição!");
+                } while (tela[lin1, col1] != 0);
+
+
                 tela[lin1, col1] = jogo[lin1, col1];
 
-                //impressão
+                Console.Write("   ");
                 for (int j = 0; j < 4; j++)
                 {
-                    for (int k = 0; k < 4; k++)
+                    Console.Write(" {0}  ", j + 1);
+                }
+                Console.WriteLine("\n-------------------");
+                for (int i = 0; i < 4; i++)
+                {
+                    Console.Write("{0} |", i + 1);
+                    for (int j = 0; j < 4; j++)
                     {
-                        Console.Write("{0} ", tela[j, k]);
+                        Console.Write(" {0} |", tela[i, j]);
                     }
-                    Console.WriteLine();
+                    Console.WriteLine("\n");
+
                 }
                 Console.WriteLine();
+
+
 
                 int lin2, col2;
-                Console.WriteLine("entre com a linha [1,4]");
-                lin2 = int.Parse(Console.ReadLine());
-                Console.WriteLine("entre com a coluna [1,4]");
-                col2 = int.Parse(Console.ReadLine());
+                do 
+                { 
+                    do
+                    {
+                        Console.WriteLine("Escolha uma linha para jogar [1, 4]: ");
+                        lin2 = int.Parse(Console.ReadLine());
 
-                lin2--; //dimunuir, pois o usuário não sabe
-                col2--; // que existe linha e coluna 0
-                //
+                    } while (lin2 < 1 || lin2 > 4);
+
+                    do
+                    {
+                        Console.WriteLine("Escolha uma coluna para jogar [1, 4]: ");
+                        col2 = int.Parse(Console.ReadLine());
+
+                    } while (col2 < 1 || col2 > 4);
+
+                    lin2--;
+                    col2--;
+
+                    if (tela[lin2, col2] != 0) 
+                    Console.WriteLine("você já escolheu essa posição!");
+                } while (tela[lin2, col2] != 0);
+                
+
                 tela[lin2, col2] = jogo[lin2, col2];
 
-                //impressão
+                Console.Write("   ");
                 for (int j = 0; j < 4; j++)
                 {
-                    for (int k = 0; k < 4; k++)
+                    Console.Write(" {0}  ", j + 1);
+                }
+                Console.WriteLine("\n-------------------");
+                for (int i = 0; i < 4; i++)
+                {
+                    Console.Write("{0} |", i + 1);
+                    for (int j = 0; j < 4; j++)
                     {
-                        Console.Write("{0} ", tela[j, k]);
+                        Console.Write(" {0} |", tela[i, j]);
                     }
-                    Console.WriteLine();
+                    Console.WriteLine("\n");
+
                 }
                 Console.WriteLine();
 
-                if (tela[lin1, col1] == tela[lin2, col2])
+
+                if (jogo[lin1, col1] != jogo[lin2, col2])
                 {
-                    acertos++;
-                }
-                else//caso não tenha acertado
-                {
+                    erros++;
                     tela[lin1, col1] = 0;
                     tela[lin2, col2] = 0;
+
                 }
+                else
+                {
+                    acertos++;
+
+                }
+                if (acertos < 8)
+                {
+                    Console.WriteLine("Deseja continuar jogando? \n\n*DIGITE 0 PARA SAIR \n*DIGITE 1 PARA CONTINUAR ");
+                    int opc = int.Parse(Console.ReadLine());
+
+                    if (opc == 0)
+                        break;
+                }
+
             } while (acertos < 8);
+            tempo.Stop();
+            Console.WriteLine("contagem de erros:{0} ", erros);
+            Console.WriteLine("Tempo decorrido: " + tempo.Elapsed);
         }
     }
 }
+
+ 
